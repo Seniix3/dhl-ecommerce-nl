@@ -1,0 +1,22 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "DHL eCommerce (NL)",
+        "description": "Log in met je my.dhlecommerce.nl-account om je inkomende pakketten te volgen.",
+        "data": {
+          "email": "E-mailadres",
+          "password": "Wachtwoord"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Ongeldig e-mailadres of wachtwoord.",
+      "cannot_connect": "Kan geen verbinding maken met DHL. Probeer het opnieuw.",
+      "unknown": "Onverwachte fout."
+    },
+    "abort": {
+      "already_configured": "Dit DHL-account is al geconfigureerd."
+    }
+  }
+}
