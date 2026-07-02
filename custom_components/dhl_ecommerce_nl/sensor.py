@@ -25,7 +25,7 @@ async def async_setup_entry(
 class DhlParcelsSensor(CoordinatorEntity[DhlDataUpdateCoordinator], SensorEntity):
     """Number of parcels currently in transit, with details as attributes."""
 
-    _attr_has_entity_name = False
+    _attr_has_entity_name = True
     _attr_icon = "mdi:package-variant-closed"
     _attr_native_unit_of_measurement = "pakketten"
     _attr_state_class = SensorStateClass.MEASUREMENT
@@ -34,9 +34,9 @@ class DhlParcelsSensor(CoordinatorEntity[DhlDataUpdateCoordinator], SensorEntity
         self, coordinator: DhlDataUpdateCoordinator, entry: ConfigEntry
     ) -> None:
         super().__init__(coordinator)
-        # Keeps the entity_id at sensor.dhl_pakketten so existing Lovelace
-        # cards keep working.
-        self._attr_name = "DHL Pakketten"
+        # Device name "DHL eCommerce" + entity name "Packages" ->
+        # entity_id sensor.dhl_ecommerce_packages.
+        self._attr_name = "Packages"
         self._attr_unique_id = f"{entry.entry_id}_parcels"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
