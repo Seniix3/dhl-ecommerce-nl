@@ -5,7 +5,7 @@ Track your incoming **DHL** parcels (the ones you *receive*, via
 
 This is a native custom integration with a UI config flow — no YAML, no
 `command_line`, no shell scripts. You log in once with your DHL account and get
-a `sensor.dhl_pakketten` entity showing how many parcels are on their way, with
+a `sensor.dhl_ecommerce_packages` entity showing how many parcels are on their way, with
 full per-parcel details in its attributes.
 
 > ⚠️ **Unofficial API.** This integration uses the same private endpoints as the
@@ -42,7 +42,7 @@ integration from the UI.
 
 ## The sensor
 
-`sensor.dhl_pakketten` (**DHL Pakketten**)
+`sensor.dhl_ecommerce_packages` (**DHL eCommerce Packages**)
 
 - **State**: number of parcels currently in transit (categories `PROBLEM`,
   `CUSTOMS`, `DATA_RECEIVED`, `EXCEPTION`, `INTERVENTION`, `IN_DELIVERY`, `LEG`,
@@ -60,7 +60,7 @@ Polls every 30 minutes.
 type: conditional
 conditions:
   - condition: numeric_state
-    entity: sensor.dhl_pakketten
+    entity: sensor.dhl_ecommerce_packages
     above: 0
 card:
   type: markdown
@@ -68,7 +68,7 @@ card:
     <table>
       <thead><tr><td>Verzender</td><td>Datum</td><td>Tijd</td></tr></thead>
       <tbody>
-      {% for p in state_attr('sensor.dhl_pakketten', 'parcels') %}
+      {% for p in state_attr('sensor.dhl_ecommerce_packages', 'parcels') %}
         {% if p.receivingTimeIndication and 'start' in p.receivingTimeIndication %}
         <tr>
           <td>{{ p.sender.name }}</td>
@@ -81,18 +81,11 @@ card:
     </table>
 ```
 
-## Before you publish this repo
-
-- Replace `YOUR_GITHUB_USERNAME` in `manifest.json` (documentation +
-  issue_tracker + codeowners) with your GitHub username.
-- Optionally update the name/copyright in `LICENSE`.
-- Create a GitHub **release/tag** (e.g. `v1.0.0`) — HACS needs a release, and
-  the tag should match the `version` in `manifest.json`.
-- Add repository **topics** including `home-assistant` and add a description, so
-  HACS shows it nicely.
-
 ## Disclaimer
 
 Not affiliated with or endorsed by DHL. "DHL" is a trademark of Deutsche Post
 AG. This project talks to an undocumented, private API and may break at any
 time.
+
+> The icon is an original design. It is not affiliated with, nor an official
+> mark of, DHL / Deutsche Post AG.
