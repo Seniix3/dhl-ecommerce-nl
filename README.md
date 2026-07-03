@@ -56,6 +56,7 @@ Polls every 30 minutes.
 
 ## Example Lovelace card
 
+Will be deliverd soon
 ```yaml
 type: conditional
 conditions:
@@ -66,19 +67,49 @@ card:
   type: markdown
   content: |
     <table>
-      <thead><tr><td>Verzender</td><td>Datum</td><td>Tijd</td></tr></thead>
+      <thead><tr><td>Sender</td><td>Date</td><td>Time</td></tr></thead>
       <tbody>
       {% for p in state_attr('sensor.dhl_ecommerce_packages', 'parcels') %}
         {% if p.receivingTimeIndication and 'start' in p.receivingTimeIndication %}
-        <tr>
-          <td>{{ p.sender.name }}</td>
-          <td>{{ as_timestamp(p.receivingTimeIndication.start) | timestamp_custom('%-d %b') }}</td>
-          <td>{{ as_timestamp(p.receivingTimeIndication.start) | timestamp_custom('%H:%M') }}</td>
-        </tr>
+        {% set pc = (p.receiver.address.postalCode if p.receiver and p.receiver.address else '') | replace(' ', '') %}
+        {% set tt = 'https://my.dhlecommerce.nl/home/tracktrace/' ~ p.barcode ~ '/' ~ pc %}
+      <tr>
+        <td><a href="{{ tt }}" target="_blank">{{ p.sender.name }}</a></td>
+        <td>{{ as_timestamp(p.receivingTimeIndication.start) | timestamp_custom('%-d %b') }}</td>
+        <td>{{ as_timestamp(p.receivingTimeIndication.start) | timestamp_custom('%H:%M') }}</td>
+      </tr>
         {% endif %}
       {% endfor %}
       </tbody>
     </table>
+
+```
+Is already deliverd (overview for the past 7 days)
+```yaml
+type: markdown
+content: >
+  {% set cutoff = now().timestamp() -7*24*3600 %} {% set delivered =
+  (state_attr('sensor.dhl_ecommerce_packages', 'delivered') or [])
+       | selectattr('receivingTimeIndication', 'defined')
+       | sort(attribute='receivingTimeIndication.moment', reverse=True) %}
+  <table>
+    <thead><tr><td>Sender</td><td>Date</td><td>Time</td></tr></thead>
+    <tbody>
+    {% for p in delivered %}
+      {% set m = p.receivingTimeIndication.moment %}
+      {% if m and as_timestamp(m, 0) >= cutoff %}
+      {% set pc = (p.receiver.address.postalCode if p.receiver and p.receiver.address else '') | replace(' ', '') %}
+      {% set tt = 'https://my.dhlecommerce.nl/home/tracktrace/' ~ p.barcode ~ '/' ~ pc %}
+    <tr>
+      <td><a href="{{ tt }}" target="_blank">{{ p.sender.name }}</a></td>
+      <td>{{ as_timestamp(m) | timestamp_custom('%-d %b') }}</td>
+      <td>{{ as_timestamp(m) | timestamp_custom('%H:%M') }}</td>
+    </tr>
+      {% endif %}
+    {% endfor %}
+    </tbody>
+  </table>
+
 ```
 
 ## Disclaimer

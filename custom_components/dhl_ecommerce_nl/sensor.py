@@ -27,7 +27,7 @@ class DhlParcelsSensor(CoordinatorEntity[DhlDataUpdateCoordinator], SensorEntity
 
     _attr_has_entity_name = True
     _attr_icon = "mdi:package-variant-closed"
-    _attr_native_unit_of_measurement = "pakketten"
+    _attr_native_unit_of_measurement = "packages"
     _attr_state_class = SensorStateClass.MEASUREMENT
 
     def __init__(
