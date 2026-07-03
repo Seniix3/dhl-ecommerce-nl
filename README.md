@@ -118,5 +118,3 @@ Not affiliated with or endorsed by DHL. "DHL" is a trademark of Deutsche Post
 AG. This project talks to an undocumented, private API and may break at any
 time.
 
-> The icon is an original design. It is not affiliated with, nor an official
-> mark of, DHL / Deutsche Post AG.
